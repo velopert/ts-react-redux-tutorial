@@ -38,17 +38,18 @@ type AsyncActionCreator = {
   cancel: (...params: any[]) => AnyAction;
 };
 
+export function transformToArray<AC extends AsyncActionCreator>(asyncActionCreator: AC) {
+  const { request, success, failure } = asyncActionCreator;
+  return [request, success, failure];
+}
+
 export function createAsyncReducer<S, AC extends AsyncActionCreator, K extends keyof S>(
   asyncActionCreator: AC,
   key: K
 ) {
   return (state: S, action: AnyAction) => {
     // 각 액션 생성함수의 type 을 추출해줍니다.
-    const [request, success, failure] = [
-      asyncActionCreator.request,
-      asyncActionCreator.success,
-      asyncActionCreator.failure
-    ].map(getType);
+    const [request, success, failure] = transformToArray(asyncActionCreator).map(getType);
     switch (action.type) {
       case request:
         return {
