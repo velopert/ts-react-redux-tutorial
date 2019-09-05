@@ -11,6 +11,6 @@ function* getUserProfileSaga(action: ReturnType<typeof getUserProfileAsync.reque
   }
 }
 
-export default function* githubSaga() {
+export function* githubSaga() {
   yield takeEvery(GET_USER_PROFILE, getUserProfileSaga);
 }
