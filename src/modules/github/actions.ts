@@ -11,5 +11,3 @@ export const getUserProfileAsync = createAsyncAction(
   GET_USER_PROFILE_SUCCESS,
   GET_USER_PROFILE_ERROR
 )<undefined, GithubProfile, AxiosError>();
-
-type b = typeof getUserProfileAsync;
