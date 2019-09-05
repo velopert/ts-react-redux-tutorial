@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { getType } from 'typesafe-actions';
+import { getType, AsyncActionCreator } from 'typesafe-actions';
 
 export type AsyncState<T, E = any> = {
   data: T | null;
@@ -31,19 +31,13 @@ export const asyncState = {
   })
 };
 
-type AsyncActionCreator = {
-  request: (...params: any[]) => AnyAction;
-  success: (...params: any[]) => AnyAction;
-  failure: (...params: any[]) => AnyAction;
-  cancel: (...params: any[]) => AnyAction;
-};
-
-export function transformToArray<AC extends AsyncActionCreator>(asyncActionCreator: AC) {
+type AnyAsyncActionCreator = AsyncActionCreator<any, any, any>;
+export function transformToArray<AC extends AnyAsyncActionCreator>(asyncActionCreator: AC) {
   const { request, success, failure } = asyncActionCreator;
   return [request, success, failure];
 }
 
-export function createAsyncReducer<S, AC extends AsyncActionCreator, K extends keyof S>(
+export function createAsyncReducer<S, AC extends AnyAsyncActionCreator, K extends keyof S>(
   asyncActionCreator: AC,
   key: K
 ) {
